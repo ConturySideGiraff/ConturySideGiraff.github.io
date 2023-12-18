@@ -4,10 +4,68 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Semicon_Networks_BugGame</title>
+
+ <!-- 새로 추가한 부분 시작 -->
+ <link rel="stylesheet" href="./TemplateData/style.css" />
+ <!-- 새로 추가한 부분 끝 -->
+
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
   <body>
+
+       <!-- 새로 추가한 부분 시작-->
+       <div
+       id="unity-container"
+       class="unity-desktop"
+       style="width: 100%; height: 100%"
+     >
+       <canvas id="unity-canvas"></canvas>
+     </div>
+ 
+     <script>
+       var buildUrl = "PC";
+       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+         buildUrl = "Mobile";
+       }
+       
+       var container = document.querySelector("#unity-container");
+       var canvas = document.querySelector("#unity-canvas");
+       var loader = document.querySelector("#loading-screen");
+ 
+       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+         container.className = "unity-mobile";
+         config.devicePixelRatio = 2;
+         if (window.devicePixelRatio < 2) {
+           config.devicePixelRatio = 1;
+         }
+       } else {
+         canvas.style.width = "100%";
+         canvas.style.height = "100%";
+       }
+ 
+       var script = document.createElement("script");
+       script.src = loaderUrl;
+       script.onload = () => {
+         createUnityInstance(canvas, config, (progress) => {})
+           .then((unityInstance) => {
+             this.unityInstance = unityInstance;
+             const x = document.getElementById("tip-first");
+             x.style.display = "block";
+             loader.style.display = "none";
+           })
+           .catch((message) => {
+             alert(message);
+           });
+       };
+       document.body.appendChild(script);
+ 
+       hello();
+       document.body.addEventListener("touchstart", tapped, false);
+       document.body.addEventListener("click", tapped, false);
+     </script>
+     <!-- 새로 추가한 부분 끝-->
+     
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=720 height=1280></canvas>
       <div id="unity-loading-bar">
